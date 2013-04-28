@@ -43,12 +43,20 @@ class BlooClient:
                 print "Server seems down... trying again in 10 seconds."
                 time.seep(10)
         s.send(json.dumps({"cmd":"transactions", "addr":self.addr_get(), "pwd":self.pwd_get()}))
+        data = ""
         while True:
-            data = s.recv(1024)
-            if data:
-                print data
+            d = s.recv(1024)
+            if d:
+                data += d
             else:
                 break
+        data = json.loads(data)
+        for t in data['transactions']:
+            if t['from'] == data['addr']:
+                print data['addr'], "->", t['to'],
+            else:
+                print data['addr'], "<-", t['from'],
+            print "" if t['amount'] <= 1 else "<" + str(t['amount']) + ">"
         return
 
     def addr(self):
