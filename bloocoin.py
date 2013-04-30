@@ -178,29 +178,31 @@ To generate a new BlooCoin address simply delete your bloostamp file and relaunc
         return
 
 if __name__ == "__main__":
+    blooclient = BlooClient()
     if not os.path.exists("bloostamp"):
         print "A bloostamp does not exist in this directory, generating one..."
         with open("bloostamp", 'w') as file:
             addr = ""
+            choices = "abcdefghijklmnopqrstuvwxzyABCDEFGHIJKLMNOPQRSTUVWZYZ1234567890"
             for x in xrange(100):
-                addr = addr + random.choice("abcdefghijklmnopqrstuvwxzyABCDEFGHIJKLMNOPQRSTUVWZYZ1234567890")
+                addr = addr + random.choice(choices)
             for x in xrange(50):
                 addr = hashlib.sha1(addr).hexdigest()
             key = ""
             for x in xrange(5000):
-                key = key + random.choice("abcdefghijklmnopqrstuvwxzyABCDEFGHIJKLMNOPQRSTUVWZYZ1234567890")
+                key = key + random.choice(choices)
             for x in xrange(1000):
                 key = hashlib.sha1(key).hexdigest()
             file.write(addr + ":" + key + ":1")
             print "Generated bloostamp! Your BlooCoin address is", addr
-            BlooClient().register(addr, key)
+            blooclient.register(addr, key)
     with open("bloostamp", "r+") as file:   # Register old accounts properly. - Remove on next update.
         data = file.read().split(":")
         file.seek(0)
         if len(data) == 2:
             addr = data[0]
             key = data[1]
-            BlooClient().register(addr, key)
+            blooclient.register(addr, key)
             print "Your account has been registered with the new system."
             file.write(addr + ":" + key + ":1")
-    BlooClient().main()
+    blooclient.main()
