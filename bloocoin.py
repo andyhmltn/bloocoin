@@ -17,6 +17,7 @@ class BlooClient:
             "coins":self.coins,
             "send":self.sendcoin,
             "help":self.help,
+            "exit":self.exit
             }
         self.update()
         return
@@ -145,6 +146,10 @@ send <amount> <to> - Send coins to another bloocoin address.
 transactions - Shows all transactions you have made.
 
 To generate a new BlooCoin address simply delete your bloostamp file and relaunch bloocoin."""
+
+    def exit(self):
+        print "Goodbye!"
+        os._exit(1)
 
     def update(self):
         s = socket.socket()
